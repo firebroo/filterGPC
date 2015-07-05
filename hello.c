@@ -126,7 +126,13 @@ PHP_RINIT_FUNCTION(hello)
         //const char * value = (*((zval**)result->pListHead->pData))->value.str.val;
         //ZEND_SET_SYMBOL( &EG(symbol_table),  "_GET" , *val);
     }
-	return SUCCESS;
+    if(zend_hash_find(ht,"_POST",sizeof("_POST"),(void**)&val) == SUCCESS) {
+        recurse_filter(((*val)->value).ht);
+    }
+    if(zend_hash_find(ht,"_COOKIE",sizeof("_COOKIE"),(void**)&val) == SUCCESS) {
+        recurse_filter(((*val)->value).ht);
+    }
+    return SUCCESS;
 }
 
 recurse_filter(HashTable *ht) {
@@ -141,7 +147,7 @@ recurse_filter(HashTable *ht) {
             recurse_filter(isArray);
         }else {
             char *value = Z_STRVAL_PP(val);
-	    regex_filter(&value);
+	        regex_filter(&value);
             (*(zval**)head->pData)->value.str.val = value;
             (*(zval**)head->pData)->value.str.len = strlen(value);
         }
@@ -151,10 +157,10 @@ recurse_filter(HashTable *ht) {
 
 
 regex_filter(char **value){
-    int status, i;
+	int status, i;
     int cflags = REG_EXTENDED | REG_ICASE;
-    regmatch_t pmatch[1];
-    const size_t nmatch = 1;
+	regmatch_t pmatch[1];
+	const size_t nmatch = 1;
     regex_t reg;
     //it's a sample.
     const char *pattern = "shell_exec|passthru|system|exec|((\\.\\.[/\\])+)|select|sleep|benchmark|and|or|between";
