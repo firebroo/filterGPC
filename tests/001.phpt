@@ -1,10 +1,10 @@
 --TEST--
-Check for mydebug presence
+Check for hello presence
 --SKIPIF--
-<?php if (!extension_loaded("mydebug")) print "skip"; ?>
+<?php if (!extension_loaded("hello")) print "skip"; ?>
 --FILE--
 <?php 
-echo "mydebug extension is available";
+echo "hello extension is available";
 /*
 	you can add regression tests for your extension here
 
@@ -18,4 +18,4 @@ echo "mydebug extension is available";
 */
 ?>
 --EXPECT--
-mydebug extension is available
+hello extension is available

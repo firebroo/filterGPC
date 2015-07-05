@@ -1,8 +1,8 @@
-mydebug.lo: /root/桌面/php-5.5.251/ext/mydebug/mydebug.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/root/桌面/php-5.5.251/ext/mydebug $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /root/桌面/php-5.5.251/ext/mydebug/mydebug.c -o mydebug.lo 
-$(phplibdir)/mydebug.la: ./mydebug.la
-	$(LIBTOOL) --mode=install cp ./mydebug.la $(phplibdir)
+hello.lo: /root/桌面/php-5.5.251/ext/hello/hello.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/root/桌面/php-5.5.251/ext/hello $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /root/桌面/php-5.5.251/ext/hello/hello.c -o hello.lo 
+$(phplibdir)/hello.la: ./hello.la
+	$(LIBTOOL) --mode=install cp ./hello.la $(phplibdir)
 
-./mydebug.la: $(shared_objects_mydebug) $(MYDEBUG_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(MYDEBUG_SHARED_LIBADD)
+./hello.la: $(shared_objects_hello) $(HELLO_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(HELLO_SHARED_LIBADD)
 

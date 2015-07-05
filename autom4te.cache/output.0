@@ -853,7 +853,7 @@ ac_user_opts='
 enable_option_checking
 with_libdir
 with_php_config
-enable_mydebug
+enable_hello
 enable_debug
 enable_shared
 enable_static
@@ -1489,7 +1489,7 @@ Optional Features and Packages:
   --with-libdir=NAME      Look for libraries in .../NAME rather than .../lib
   --with-php-config=PATH  Path to php-config php-config
 Make sure that the comment is aligned:
-  --enable-mydebug           Enable mydebug support
+  --enable-hello           Enable hello support
    --enable-debug          compile with debugging symbols
   --enable-shared=PKGS    Build shared libraries default=yes
   --enable-static=PKGS    Build static libraries default=yes
@@ -4054,17 +4054,17 @@ $as_echo "no" >&6; }
 
 
 
-php_enable_mydebug=no
+php_enable_hello=no
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable mydebug support" >&5
-$as_echo_n "checking whether to enable mydebug support... " >&6; }
-@%:@ Check whether --enable-mydebug was given.
-if test "${enable_mydebug+set}" = set; then :
-  enableval=$enable_mydebug; PHP_MYDEBUG=$enableval
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable hello support" >&5
+$as_echo_n "checking whether to enable hello support... " >&6; }
+@%:@ Check whether --enable-hello was given.
+if test "${enable_hello+set}" = set; then :
+  enableval=$enable_hello; PHP_HELLO=$enableval
 else
   
-  PHP_MYDEBUG=no
-  test "$PHP_ENABLE_ALL" && PHP_MYDEBUG=$PHP_ENABLE_ALL
+  PHP_HELLO=no
+  test "$PHP_ENABLE_ALL" && PHP_HELLO=$PHP_ENABLE_ALL
 
 fi
 
@@ -4072,12 +4072,12 @@ fi
 
 ext_output="yes, shared"
 ext_shared=yes
-case $PHP_MYDEBUG in
+case $PHP_HELLO in
 shared,*)
-  PHP_MYDEBUG=`echo "$PHP_MYDEBUG"|$SED 's/^shared,//'`
+  PHP_HELLO=`echo "$PHP_HELLO"|$SED 's/^shared,//'`
   ;;
 shared)
-  PHP_MYDEBUG=yes
+  PHP_HELLO=yes
   ;;
 no)
   ext_output=no
@@ -4092,7 +4092,7 @@ esac
 
   ext_output="yes, shared"
   ext_shared=yes
-  test "$PHP_MYDEBUG" = "no" && PHP_MYDEBUG=yes
+  test "$PHP_HELLO" = "no" && PHP_HELLO=yes
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ext_output" >&5
@@ -4101,7 +4101,7 @@ $as_echo "$ext_output" >&6; }
 
 
 
-if test "$PHP_MYDEBUG" != "no"; then
+if test "$PHP_HELLO" != "no"; then
   
                                       
     
@@ -4114,7 +4114,7 @@ if test "$PHP_MYDEBUG" != "no"; then
   ac_extra=
 
   if test "$ext_shared" != "shared" && test "$ext_shared" != "yes" && test "" != "cli"; then
-    PHP_MYDEBUG_SHARED=no
+    PHP_HELLO_SHARED=no
     
   
   case "" in
@@ -4135,7 +4135,7 @@ if test "$PHP_MYDEBUG" != "no"; then
 
 
   old_IFS=$IFS
-  for ac_src in mydebug.c; do
+  for ac_src in hello.c; do
   
       IFS=.
       set $ac_src
@@ -4158,13 +4158,13 @@ EOF
   done
 
 
-    EXT_STATIC="$EXT_STATIC mydebug"
+    EXT_STATIC="$EXT_STATIC hello"
     if test "$ext_shared" != "nocli"; then
-      EXT_CLI_STATIC="$EXT_CLI_STATIC mydebug"
+      EXT_CLI_STATIC="$EXT_CLI_STATIC hello"
     fi
   else
     if test "$ext_shared" = "shared" || test "$ext_shared" = "yes"; then
-      PHP_MYDEBUG_SHARED=yes
+      PHP_HELLO_SHARED=yes
       
   case "" in
   "") ac_srcdir="$abs_srcdir/"; unset ac_bdir; ac_inc="-I. -I$abs_srcdir" ;;
@@ -4184,14 +4184,14 @@ EOF
 
 
   old_IFS=$IFS
-  for ac_src in mydebug.c; do
+  for ac_src in hello.c; do
   
       IFS=.
       set $ac_src
       ac_obj=$1
       IFS=$old_IFS
       
-      shared_objects_mydebug="$shared_objects_mydebug $ac_bdir$ac_obj.lo"
+      shared_objects_hello="$shared_objects_hello $ac_bdir$ac_obj.lo"
 
       case $ac_src in
         *.c) ac_comp="$b_c_pre $ac_extra $ac_inc $b_c_meta -c $ac_srcdir$ac_src -o $ac_bdir$ac_obj.$b_lo $b_c_post" ;;
@@ -4214,31 +4214,31 @@ EOF
   case $host_alias in
     *aix*)
       suffix=so
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -Wl,-G -o '$ext_builddir'/phpmydebug.la -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(PHPMYDEBUG_SHARED_LIBADD) && mv -f '$ext_builddir'/.libs/phpmydebug.so '$ext_builddir'/phpmydebug.so'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -Wl,-G -o '$ext_builddir'/phphello.la -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(PHPHELLO_SHARED_LIBADD) && mv -f '$ext_builddir'/.libs/phphello.so '$ext_builddir'/phphello.so'
       ;;
     *netware*)
       suffix=nlm
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -shared -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) -L$(top_builddir)/netware -lphp5lib $(MYDEBUG_SHARED_LIBADD)'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -shared -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) -L$(top_builddir)/netware -lphp5lib $(HELLO_SHARED_LIBADD)'
       ;;
     *)
       suffix=la
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(PHPMYDEBUG_SHARED_LIBADD)'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(PHPHELLO_SHARED_LIBADD)'
       ;;
   esac
 
   if test "x" = "xyes"; then
-    PHP_ZEND_EX="$PHP_ZEND_EX \$(phplibdir)/phpmydebug.$suffix"
+    PHP_ZEND_EX="$PHP_ZEND_EX \$(phplibdir)/phphello.$suffix"
   else
-    PHP_MODULES="$PHP_MODULES \$(phplibdir)/phpmydebug.$suffix"
+    PHP_MODULES="$PHP_MODULES \$(phplibdir)/phphello.$suffix"
   fi
   
-  PHP_VAR_SUBST="$PHP_VAR_SUBST shared_objects_mydebug"
+  PHP_VAR_SUBST="$PHP_VAR_SUBST shared_objects_hello"
 
   cat >>Makefile.objects<<EOF
-\$(phplibdir)/phpmydebug.$suffix: $ext_builddir/phpmydebug.$suffix
-	\$(LIBTOOL) --mode=install cp $ext_builddir/phpmydebug.$suffix \$(phplibdir)
+\$(phplibdir)/phphello.$suffix: $ext_builddir/phphello.$suffix
+	\$(LIBTOOL) --mode=install cp $ext_builddir/phphello.$suffix \$(phplibdir)
 
-$ext_builddir/phpmydebug.$suffix: \$(shared_objects_mydebug) \$(PHPMYDEBUG_SHARED_DEPENDENCIES)
+$ext_builddir/phphello.$suffix: \$(shared_objects_hello) \$(PHPHELLO_SHARED_DEPENDENCIES)
 	$link_cmd
 
 EOF
@@ -4251,31 +4251,31 @@ EOF
   case $host_alias in
     *aix*)
       suffix=so
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -Wl,-G -o '$ext_builddir'/mydebug.la -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(MYDEBUG_SHARED_LIBADD) && mv -f '$ext_builddir'/.libs/mydebug.so '$ext_builddir'/mydebug.so'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -Wl,-G -o '$ext_builddir'/hello.la -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(HELLO_SHARED_LIBADD) && mv -f '$ext_builddir'/.libs/hello.so '$ext_builddir'/hello.so'
       ;;
     *netware*)
       suffix=nlm
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -shared -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) -L$(top_builddir)/netware -lphp5lib $(EBUG_SHARED_LIBADD)'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -shared -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) -L$(top_builddir)/netware -lphp5lib $(LO_SHARED_LIBADD)'
       ;;
     *)
       suffix=la
-      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(MYDEBUG_SHARED_LIBADD)'
+      link_cmd='$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(HELLO_SHARED_LIBADD)'
       ;;
   esac
 
   if test "x" = "xyes"; then
-    PHP_ZEND_EX="$PHP_ZEND_EX \$(phplibdir)/mydebug.$suffix"
+    PHP_ZEND_EX="$PHP_ZEND_EX \$(phplibdir)/hello.$suffix"
   else
-    PHP_MODULES="$PHP_MODULES \$(phplibdir)/mydebug.$suffix"
+    PHP_MODULES="$PHP_MODULES \$(phplibdir)/hello.$suffix"
   fi
   
-  PHP_VAR_SUBST="$PHP_VAR_SUBST shared_objects_mydebug"
+  PHP_VAR_SUBST="$PHP_VAR_SUBST shared_objects_hello"
 
   cat >>Makefile.objects<<EOF
-\$(phplibdir)/mydebug.$suffix: $ext_builddir/mydebug.$suffix
-	\$(LIBTOOL) --mode=install cp $ext_builddir/mydebug.$suffix \$(phplibdir)
+\$(phplibdir)/hello.$suffix: $ext_builddir/hello.$suffix
+	\$(LIBTOOL) --mode=install cp $ext_builddir/hello.$suffix \$(phplibdir)
 
-$ext_builddir/mydebug.$suffix: \$(shared_objects_mydebug) \$(MYDEBUG_SHARED_DEPENDENCIES)
+$ext_builddir/hello.$suffix: \$(shared_objects_hello) \$(HELLO_SHARED_DEPENDENCIES)
 	$link_cmd
 
 EOF
@@ -4284,14 +4284,14 @@ EOF
       esac
       
 cat >>confdefs.h <<_ACEOF
-@%:@define COMPILE_DL_MYDEBUG 1
+@%:@define COMPILE_DL_HELLO 1
 _ACEOF
 
     fi
   fi
 
   if test "$ext_shared" != "shared" && test "$ext_shared" != "yes" && test "" = "cli"; then
-    PHP_MYDEBUG_SHARED=no
+    PHP_HELLO_SHARED=no
     case "$PHP_SAPI" in
       cgi|embed)
         
@@ -4314,7 +4314,7 @@ _ACEOF
 
 
   old_IFS=$IFS
-  for ac_src in mydebug.c; do
+  for ac_src in hello.c; do
   
       IFS=.
       set $ac_src
@@ -4337,7 +4337,7 @@ EOF
   done
 
 
-        EXT_STATIC="$EXT_STATIC mydebug"
+        EXT_STATIC="$EXT_STATIC hello"
         ;;
       *)
         
@@ -4360,7 +4360,7 @@ EOF
 
 
   old_IFS=$IFS
-  for ac_src in mydebug.c; do
+  for ac_src in hello.c; do
   
       IFS=.
       set $ac_src
@@ -4385,7 +4385,7 @@ EOF
 
         ;;
     esac
-    EXT_CLI_STATIC="$EXT_CLI_STATIC mydebug"
+    EXT_CLI_STATIC="$EXT_CLI_STATIC hello"
   fi
   
   
@@ -4394,13 +4394,14 @@ EOF
 
 
   if test "$ext_builddir" = "."; then
-    PHP_PECL_EXTENSION=mydebug
+    PHP_PECL_EXTENSION=hello
     
   PHP_VAR_SUBST="$PHP_VAR_SUBST PHP_PECL_EXTENSION"
 
   fi
 
 fi
+
 if test -z "$PHP_DEBUG"; then   
     @%:@ Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
@@ -4412,7 +4413,7 @@ else
     
 fi
   
-fi 
+fi  
 
 
 enable_static=no

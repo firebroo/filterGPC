@@ -2,12 +2,12 @@
 // vim:ft=javascript
 
 // If your extension references something external, use ARG_WITH
-// ARG_WITH("mydebug", "for mydebug support", "no");
+// ARG_WITH("hello", "for hello support", "no");
 
 // Otherwise, use ARG_ENABLE
-// ARG_ENABLE("mydebug", "enable mydebug support", "no");
+// ARG_ENABLE("hello", "enable hello support", "no");
 
-if (PHP_MYDEBUG != "no") {
-	EXTENSION("mydebug", "mydebug.c");
+if (PHP_HELLO != "no") {
+	EXTENSION("hello", "hello.c");
 }
 

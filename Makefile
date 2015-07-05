@@ -1,7 +1,7 @@
-srcdir = /root/桌面/php-5.5.251/ext/mydebug
-builddir = /root/桌面/php-5.5.251/ext/mydebug
-top_srcdir = /root/桌面/php-5.5.251/ext/mydebug
-top_builddir = /root/桌面/php-5.5.251/ext/mydebug
+srcdir = /root/桌面/php-5.5.251/ext/hello
+builddir = /root/桌面/php-5.5.251/ext/hello
+top_srcdir = /root/桌面/php-5.5.251/ext/hello
+top_builddir = /root/桌面/php-5.5.251/ext/hello
 EGREP = /usr/bin/grep -E
 SED = /usr/bin/sed
 CONFIGURE_COMMAND = './configure' '--with-php-config=/opt/php5/bin/php-config' '--enable-debug'
@@ -11,9 +11,9 @@ SHLIB_DL_SUFFIX_NAME = so
 ZEND_EXT_TYPE = zend_extension
 RE2C = exit 0;
 AWK = gawk
-shared_objects_mydebug = mydebug.lo
-PHP_PECL_EXTENSION = mydebug
-PHP_MODULES = $(phplibdir)/mydebug.la
+shared_objects_hello = hello.lo
+PHP_PECL_EXTENSION = hello
+PHP_MODULES = $(phplibdir)/hello.la
 PHP_ZEND_EX =
 all_targets = $(PHP_MODULES) $(PHP_ZEND_EX)
 install_targets = install-modules install-headers
@@ -21,7 +21,7 @@ prefix = /opt/php5
 exec_prefix = $(prefix)
 libdir = ${exec_prefix}/lib
 prefix = /opt/php5
-phplibdir = /root/桌面/php-5.5.251/ext/mydebug/modules
+phplibdir = /root/桌面/php-5.5.251/ext/hello/modules
 phpincludedir = /opt/php5/include/php
 CC = cc
 CFLAGS = -g -O0
@@ -176,11 +176,11 @@ distclean: clean
 
 .PHONY: all clean install distclean test
 .NOEXPORT:
-mydebug.lo: /root/桌面/php-5.5.251/ext/mydebug/mydebug.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/root/桌面/php-5.5.251/ext/mydebug $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /root/桌面/php-5.5.251/ext/mydebug/mydebug.c -o mydebug.lo 
-$(phplibdir)/mydebug.la: ./mydebug.la
-	$(LIBTOOL) --mode=install cp ./mydebug.la $(phplibdir)
+hello.lo: /root/桌面/php-5.5.251/ext/hello/hello.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/root/桌面/php-5.5.251/ext/hello $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /root/桌面/php-5.5.251/ext/hello/hello.c -o hello.lo 
+$(phplibdir)/hello.la: ./hello.la
+	$(LIBTOOL) --mode=install cp ./hello.la $(phplibdir)
 
-./mydebug.la: $(shared_objects_mydebug) $(MYDEBUG_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_mydebug) $(MYDEBUG_SHARED_LIBADD)
+./hello.la: $(shared_objects_hello) $(HELLO_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(HELLO_SHARED_LIBADD)
 

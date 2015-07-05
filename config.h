@@ -1,8 +1,8 @@
 /* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
-/* Whether to build mydebug as dynamic module */
-#define COMPILE_DL_MYDEBUG 1
+/* Whether to build hello as dynamic module */
+#define COMPILE_DL_HELLO 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1

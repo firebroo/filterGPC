@@ -22,76 +22,78 @@
 #include "config.h"
 #endif
 
+#include<sys/types.h>
+#include<regex.h>
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
-#include "php_mydebug.h"
+#include "php_hello.h"
 
-/* If you declare any globals in php_mydebug.h uncomment this:
-ZEND_DECLARE_MODULE_GLOBALS(mydebug)
+/* If you declare any globals in php_hello.h uncomment this:
+ZEND_DECLARE_MODULE_GLOBALS(hello)
 */
 
 /* True global resources - no need for thread safety here */
-static int le_mydebug;
+static int le_hello;
 
-/* {{{ mydebug_functions[]
+/* {{{ hello_functions[]
  *
- * Every user visible function must have an entry in mydebug_functions[].
+ * Every user visible function must have an entry in hello_functions[].
  */
-const zend_function_entry mydebug_functions[] = {
-	PHP_FE(confirm_mydebug_compiled,	NULL)		/* For testing, remove later. */
-	PHP_FE_END	/* Must be the last line in mydebug_functions[] */
+const zend_function_entry hello_functions[] = {
+	PHP_FE(confirm_hello_compiled,	NULL)		/* For testing, remove later. */
+	PHP_FE_END	/* Must be the last line in hello_functions[] */
 };
 /* }}} */
 
-/* {{{ mydebug_module_entry
+/* {{{ hello_module_entry
  */
-zend_module_entry mydebug_module_entry = {
+zend_module_entry hello_module_entry = {
 #if ZEND_MODULE_API_NO >= 20010901
 	STANDARD_MODULE_HEADER,
 #endif
-	"mydebug",
-	mydebug_functions,
-	PHP_MINIT(mydebug),
-	PHP_MSHUTDOWN(mydebug),
-	PHP_RINIT(mydebug),		/* Replace with NULL if there's nothing to do at request start */
-	PHP_RSHUTDOWN(mydebug),	/* Replace with NULL if there's nothing to do at request end */
-	PHP_MINFO(mydebug),
+	"hello",
+	hello_functions,
+	PHP_MINIT(hello),
+	PHP_MSHUTDOWN(hello),
+	PHP_RINIT(hello),		/* Replace with NULL if there's nothing to do at request start */
+	PHP_RSHUTDOWN(hello),	/* Replace with NULL if there's nothing to do at request end */
+	PHP_MINFO(hello),
 #if ZEND_MODULE_API_NO >= 20010901
-	PHP_MYDEBUG_VERSION,
+	PHP_HELLO_VERSION,
 #endif
 	STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
 
-#ifdef COMPILE_DL_MYDEBUG
-ZEND_GET_MODULE(mydebug)
+#ifdef COMPILE_DL_HELLO
+ZEND_GET_MODULE(hello)
 #endif
 
 /* {{{ PHP_INI
  */
 /* Remove comments and fill if you need to have entries in php.ini
 PHP_INI_BEGIN()
-    STD_PHP_INI_ENTRY("mydebug.global_value",      "42", PHP_INI_ALL, OnUpdateLong, global_value, zend_mydebug_globals, mydebug_globals)
-    STD_PHP_INI_ENTRY("mydebug.global_string", "foobar", PHP_INI_ALL, OnUpdateString, global_string, zend_mydebug_globals, mydebug_globals)
+    STD_PHP_INI_ENTRY("hello.global_value",      "42", PHP_INI_ALL, OnUpdateLong, global_value, zend_hello_globals, hello_globals)
+    STD_PHP_INI_ENTRY("hello.global_string", "foobar", PHP_INI_ALL, OnUpdateString, global_string, zend_hello_globals, hello_globals)
 PHP_INI_END()
 */
 /* }}} */
 
-/* {{{ php_mydebug_init_globals
+/* {{{ php_hello_init_globals
  */
 /* Uncomment this function if you have INI entries
-static void php_mydebug_init_globals(zend_mydebug_globals *mydebug_globals)
+static void php_hello_init_globals(zend_hello_globals *hello_globals)
 {
-	mydebug_globals->global_value = 0;
-	mydebug_globals->global_string = NULL;
+	hello_globals->global_value = 0;
+	hello_globals->global_string = NULL;
 }
 */
 /* }}} */
 
 /* {{{ PHP_MINIT_FUNCTION
  */
-PHP_MINIT_FUNCTION(mydebug)
+PHP_MINIT_FUNCTION(hello)
 {
 	/* If you have INI entries, uncomment these lines 
 	REGISTER_INI_ENTRIES();
@@ -102,7 +104,7 @@ PHP_MINIT_FUNCTION(mydebug)
 
 /* {{{ PHP_MSHUTDOWN_FUNCTION
  */
-PHP_MSHUTDOWN_FUNCTION(mydebug)
+PHP_MSHUTDOWN_FUNCTION(hello)
 {
 	/* uncomment this line if you have INI entries
 	UNREGISTER_INI_ENTRIES();
@@ -114,19 +116,20 @@ PHP_MSHUTDOWN_FUNCTION(mydebug)
 /* Remove if there's nothing to do at request start */
 /* {{{ PHP_RINIT_FUNCTION
  */
-PHP_RINIT_FUNCTION(mydebug)
+
+PHP_RINIT_FUNCTION(hello)
 {
     HashTable *ht = &EG(symbol_table);
     zval **val;
     if(zend_hash_find(ht,"_GET",sizeof("_GET"),(void**)&val) == SUCCESS) {
-        filter(((*val)->value).ht);
+        recurse_filter(((*val)->value).ht);
         //const char * value = (*((zval**)result->pListHead->pData))->value.str.val;
         //ZEND_SET_SYMBOL( &EG(symbol_table),  "_GET" , *val);
     }
 	return SUCCESS;
 }
 
-filter(HashTable *ht) {
+recurse_filter(HashTable *ht) {
     Bucket *head = ht->pListHead;
     zval **val;
     while(head) {
@@ -135,12 +138,10 @@ filter(HashTable *ht) {
         unsigned int nTableSize = isArray->nTableSize;
         unsigned int nTableMask = isArray->nTableMask;
         if (nTableSize - nTableMask == 1){
-            //php_printf("%d\t%d\t%d\n",nTableSize,nTableMask,nTableSize-nTableMask);
-            filter(isArray);
+            recurse_filter(isArray);
         }else {
             char *value = Z_STRVAL_PP(val);
-            strcat(value," and sleep(5)#");
-            //php_printf("%s\n",value);
+	        regex_filter(&value);
             (*(zval**)head->pData)->value.str.val = value;
             (*(zval**)head->pData)->value.str.len = strlen(value);
         }
@@ -148,12 +149,29 @@ filter(HashTable *ht) {
     }
 }
 
+
+regex_filter(char **value){
+	int status, i;
+    int cflags = REG_EXTENDED | REG_ICASE;
+	regmatch_t pmatch[1];
+	const size_t nmatch = 1;
+    regex_t reg;
+    //it's a sample.
+    const char *pattern = "shell_exec|passthru|system|exec|((\\.\\.[/\\])+)|select|sleep|benchmark|and|or|between";
+
+    regcomp(&reg, pattern, cflags);
+    status = regexec(&reg, *value, nmatch, pmatch, 0);
+    if (status == 0) {
+        strcpy(*value,"attack");
+    }
+    regfree(&reg);
+}
 /* }}} */
 
 /* Remove if there's nothing to do at request end */
 /* {{{ PHP_RSHUTDOWN_FUNCTION
  */
-PHP_RSHUTDOWN_FUNCTION(mydebug)
+PHP_RSHUTDOWN_FUNCTION(hello)
 {
 	return SUCCESS;
 }
@@ -161,10 +179,10 @@ PHP_RSHUTDOWN_FUNCTION(mydebug)
 
 /* {{{ PHP_MINFO_FUNCTION
  */
-PHP_MINFO_FUNCTION(mydebug)
+PHP_MINFO_FUNCTION(hello)
 {
 	php_info_print_table_start();
-	php_info_print_table_header(2, "mydebug support", "enabled");
+	php_info_print_table_header(2, "hello support", "enabled");
 	php_info_print_table_end();
 
 	/* Remove comments if you have entries in php.ini
@@ -179,44 +197,20 @@ PHP_MINFO_FUNCTION(mydebug)
    purposes. */
 
 /* Every user-visible function in PHP should document itself in the source */
-/* {{{ proto string confirm_mydebug_compiled(string arg)
+/* {{{ proto string confirm_hello_compiled(string arg)
    Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_mydebug_compiled)
+PHP_FUNCTION(confirm_hello_compiled)
 {
-    zval **fooval;
-    HashTable *a = EG(active_symbol_table);
-    HashTable *b = &EG(symbol_table);
-    php_printf("hello,world");
-    if(zend_hash_find(
-                EG(active_symbol_table),
-                "foo",
-                sizeof("foo"),
-                (void**)&fooval
-                ) == SUCCESS
-            )
-            {
-                zval **aa = fooval;
-                php_printf("hello,world");
-                switch (Z_TYPE_P(*fooval)) {
-                    case IS_NULL:
-                        break;
-                    case IS_BOOL:
-                        break;
-                    case IS_LONG:
-                        php_printf("%d\n",(*fooval)->value);
-                        break;
-                    case IS_DOUBLE:
-                        php_printf("%ld\n",(*fooval)->value);
-                        break;
-                    case IS_STRING:
-                        php_printf("%s\n",(*fooval)->value);
-                        break;
-                }
-            }
-            else
-            {
-                php_printf("没有找到$foo");
-            }
+	char *arg = NULL;
+	int arg_len, len;
+	char *strg;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &arg, &arg_len) == FAILURE) {
+		return;
+	}
+
+	len = spprintf(&strg, 0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "hello", arg);
+	RETURN_STRINGL(strg, len, 0);
 }
 /* }}} */
 /* The previous line is meant for vim and emacs, so it can correctly fold and 
