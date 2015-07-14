@@ -135,7 +135,7 @@ PHP_RINIT_FUNCTION(hello)
     return SUCCESS;
 }
 
-recurse_filter(HashTable *ht) {
+static void recurse_filter(HashTable *ht) {
     Bucket *head = ht->pListHead;
     zval **val;
     while(head) {
@@ -156,7 +156,7 @@ recurse_filter(HashTable *ht) {
 }
 
 
-regex_filter(char **value){
+static void regex_filter(char **value){
 	int status, i;
     int cflags = REG_EXTENDED | REG_ICASE;
 	regmatch_t pmatch[1];
