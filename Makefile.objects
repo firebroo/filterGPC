@@ -1,8 +1,0 @@
-hello.lo: /root/桌面/php-5.5.251/ext/hello/hello.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/root/桌面/php-5.5.251/ext/hello $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /root/桌面/php-5.5.251/ext/hello/hello.c -o hello.lo 
-$(phplibdir)/hello.la: ./hello.la
-	$(LIBTOOL) --mode=install cp ./hello.la $(phplibdir)
-
-./hello.la: $(shared_objects_hello) $(HELLO_SHARED_DEPENDENCIES)
-	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_hello) $(HELLO_SHARED_LIBADD)
-

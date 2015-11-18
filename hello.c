@@ -95,7 +95,7 @@ static void php_hello_init_globals(zend_hello_globals *hello_globals)
  */
 PHP_MINIT_FUNCTION(hello)
 {
-	/* If you have INI entries, uncomment these lines 
+	/* If you have INI entries, uncomment these lines
 	REGISTER_INI_ENTRIES();
 	*/
 	return SUCCESS;
@@ -162,7 +162,7 @@ regex_filter(char **value){
 	regmatch_t pmatch[1];
 	const size_t nmatch = 1;
     regex_t reg;
-    //it's a sample.
+    //it's some simple regular.
     const char *pattern = "shell_exec|passthru|system|exec|((\\.\\.[/\\])+)|select|sleep|benchmark|and|or|between";
 
     regcomp(&reg, pattern, cflags);
@@ -219,9 +219,9 @@ PHP_FUNCTION(confirm_hello_compiled)
 	RETURN_STRINGL(strg, len, 0);
 }
 /* }}} */
-/* The previous line is meant for vim and emacs, so it can correctly fold and 
-   unfold functions in source code. See the corresponding marks just before 
-   function definition, where the functions purpose is also documented. Please 
+/* The previous line is meant for vim and emacs, so it can correctly fold and
+   unfold functions in source code. See the corresponding marks just before
+   function definition, where the functions purpose is also documented. Please
    follow this convention for the convenience of others editing your code.
 */
 
