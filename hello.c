@@ -157,10 +157,10 @@ recurse_filter(HashTable *ht) {
 
 
 regex_filter(char **value){
-	int status, i;
+    int status, i;
     int cflags = REG_EXTENDED | REG_ICASE;
-	regmatch_t pmatch[1];
-	const size_t nmatch = 1;
+    regmatch_t pmatch[1];
+    const size_t nmatch = 1;
     regex_t reg;
     //it's some simple regular.
     const char *pattern = "shell_exec|passthru|system|exec|((\\.\\.[/\\])+)|select|sleep|benchmark|and|or|between";
