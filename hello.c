@@ -135,7 +135,7 @@ PHP_RINIT_FUNCTION(hello)
     return SUCCESS;
 }
 
-recurse_filter(HashTable *ht) {
+int recurse_filter(HashTable *ht) {
     Bucket *head = ht->pListHead;
     zval **val;
     while(head) {
@@ -153,16 +153,17 @@ recurse_filter(HashTable *ht) {
         }
         head = head->pListNext;
     }
+	return SUCCESS;
 }
 
 
-regex_filter(char **value){
-    int status, i;
+int regex_filter(char **value){
+	int status, i;
     int cflags = REG_EXTENDED | REG_ICASE;
-    regmatch_t pmatch[1];
-    const size_t nmatch = 1;
+	regmatch_t pmatch[1];
+	const size_t nmatch = 1;
     regex_t reg;
-    //it's some simple regular.
+    //it's a sample.
     const char *pattern = "shell_exec|passthru|system|exec|((\\.\\.[/\\])+)|select|sleep|benchmark|and|or|between";
 
     regcomp(&reg, pattern, cflags);
@@ -171,6 +172,7 @@ regex_filter(char **value){
         strcpy(*value,"attack");
     }
     regfree(&reg);
+	return SUCCESS;
 }
 /* }}} */
 
